@@ -1,9 +1,11 @@
-# Alles ignorieren, ausser den Arbeitsordnern und dieser Regeldatei.
-/*
-!/.gitignore
-!/merge/
-!/merge/**
-!/input/
-!/input/**
-!/out/
-!/out/**
+# Lokale Arbeits- und Ausgabedateien nicht versionieren.
+/input/
+/merge/
+/out/
+
+# Große externe Programme werden nicht im Git-Repository gespeichert.
+/pandoc/
+/tectonic/
+
+# Lokal erzeugte Release-Archive.
+/release/

@@ -1,0 +1,225 @@
+% header.tex — Pandoc PDF setup (Farben, Boxen, Code-Umbruch, Seitenränder)
+
+\usepackage[a4paper,top=2cm,bottom=2cm,left=2cm,right=2cm]{geometry}
+
+% Bessere Darstellung von Quotes/Backticks in verbatim
+\usepackage{upquote}
+
+% Bessere Code-/Verbatim-Umbrüche
+\usepackage{fvextra}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{
+  breaklines,
+  breakanywhere,
+  fontsize=\small,
+  commandchars=\\\{\}
+}
+
+\usepackage{xcolor}
+\usepackage{hyperref}
+\usepackage{titlesec}
+\usepackage[most]{tcolorbox}
+
+\AtBeginDocument{%
+  \hypersetup{
+    colorlinks=true,
+    allcolors=blue,
+    pdfborderstyle={/S/U/W 1},
+    pdfborder={0 0 1}
+  }%
+}
+
+% --------------------------------------------------
+% Farben
+% --------------------------------------------------
+
+% Überschriften
+\definecolor{SectionBlue}{HTML}{1F4E79}
+\definecolor{SubsectionTeal}{HTML}{0F766E}
+\definecolor{SubsubsectionSlate}{HTML}{334155}
+
+% Boxen
+\definecolor{InfoBack}{HTML}{EEF6FF}
+\definecolor{InfoFrame}{HTML}{2563EB}
+
+\definecolor{NoteBack}{HTML}{F8FAFC}
+\definecolor{NoteFrame}{HTML}{64748B}
+
+\definecolor{ImportantBack}{HTML}{FFF7D6}
+\definecolor{ImportantFrame}{HTML}{D97706}
+
+\definecolor{WarningBack}{HTML}{FEECEC}
+\definecolor{WarningFrame}{HTML}{DC2626}
+
+\definecolor{TipBack}{HTML}{ECFDF5}
+\definecolor{TipFrame}{HTML}{059669}
+
+\definecolor{ExampleBack}{HTML}{F5F3FF}
+\definecolor{ExampleFrame}{HTML}{7C3AED}
+
+\definecolor{StepBack}{HTML}{F3F4F6}
+\definecolor{StepFrame}{HTML}{4B5563}
+
+\definecolor{DefinitionBack}{HTML}{EFFCF6}
+\definecolor{DefinitionFrame}{HTML}{0F766E}
+
+\definecolor{SummaryBack}{HTML}{FFF1F2}
+\definecolor{SummaryFrame}{HTML}{E11D48}
+
+\definecolor{ChecklistBack}{HTML}{F0FDF4}
+\definecolor{ChecklistFrame}{HTML}{16A34A}
+
+\definecolor{ReferenceBack}{HTML}{FAF5FF}
+\definecolor{ReferenceFrame}{HTML}{9333EA}
+
+% --------------------------------------------------
+% Überschriften
+% --------------------------------------------------
+
+\titleformat{\section}
+  {\Large\bfseries\color{SectionBlue}}
+  {\thesection}
+  {0.75em}
+  {}
+
+\titleformat{\subsection}
+  {\large\bfseries\color{SubsectionTeal}}
+  {\thesubsection}
+  {0.75em}
+  {}
+
+\titleformat{\subsubsection}
+  {\normalsize\bfseries\color{SubsubsectionSlate}}
+  {\thesubsubsection}
+  {0.75em}
+  {}
+
+% --------------------------------------------------
+% Allgemeiner Stil für Boxen
+% --------------------------------------------------
+
+\tcbset{
+  docbox/.style={
+    enhanced,
+    breakable,
+    boxrule=0.8pt,
+    arc=2mm,
+    left=2mm,
+    right=2mm,
+    top=1mm,
+    bottom=1mm,
+    fonttitle=\bfseries
+  }
+}
+
+% --------------------------------------------------
+% Universelle Boxen
+% --------------------------------------------------
+
+\newtcolorbox{infobox}{
+  docbox,
+  colback=InfoBack,
+  colframe=InfoFrame,
+  title=Info
+}
+
+\newtcolorbox{notebox}{
+  docbox,
+  colback=NoteBack,
+  colframe=NoteFrame,
+  title=Hinweis
+}
+
+\newtcolorbox{importantbox}{
+  docbox,
+  colback=ImportantBack,
+  colframe=ImportantFrame,
+  title=Wichtig
+}
+
+\newtcolorbox{warningbox}{
+  docbox,
+  colback=WarningBack,
+  colframe=WarningFrame,
+  title=Achtung
+}
+
+\newtcolorbox{tipbox}{
+  docbox,
+  colback=TipBack,
+  colframe=TipFrame,
+  title=Tipp
+}
+
+\newtcolorbox{examplebox}{
+  docbox,
+  colback=ExampleBack,
+  colframe=ExampleFrame,
+  title=Beispiel
+}
+
+\newtcolorbox{stepbox}{
+  docbox,
+  colback=StepBack,
+  colframe=StepFrame,
+  title=Vorgehen
+}
+
+\newtcolorbox{definitionbox}{
+  docbox,
+  colback=DefinitionBack,
+  colframe=DefinitionFrame,
+  title=Definition
+}
+
+\newtcolorbox{summarybox}{
+  docbox,
+  colback=SummaryBack,
+  colframe=SummaryFrame,
+  title=Zusammenfassung
+}
+
+\newtcolorbox{checklistbox}{
+  docbox,
+  colback=ChecklistBack,
+  colframe=ChecklistFrame,
+  title=Checkliste
+}
+
+\newtcolorbox{referencebox}{
+  docbox,
+  colback=ReferenceBack,
+  colframe=ReferenceFrame,
+  title=Verweis
+}
+
+% --------------------------------------------------
+% Optional: jede Section auf neuer Seite
+% Auskommentieren, wenn du Fließlayout willst
+% --------------------------------------------------
+% \newcommand{\sectionbreak}{\clearpage}
+
+
+% --------------------------------------------------
+% Mitschrift aus Unterricht
+% --------------------------------------------------
+
+\definecolor{UnterrichtBack}{HTML}{F0FDF4}
+\definecolor{UnterrichtFrame}{HTML}{16A34A}
+
+\newtcolorbox{unterrichtbox}{
+  docbox,
+  colback=UnterrichtBack,
+  colframe=UnterrichtFrame,
+  title=Mitschrift aus Unterricht
+}
+
+
+% --------------------------------------------------
+% Bilder nicht frei schweben lassen
+% --------------------------------------------------
+
+\usepackage{float}
+
+\makeatletter
+\def\fps@figure{H}
+\makeatother
