@@ -1,0 +1,9 @@
+# Alles ignorieren, ausser den Arbeitsordnern und dieser Regeldatei.
+/*
+!/.gitignore
+!/merge/
+!/merge/**
+!/input/
+!/input/**
+!/out/
+!/out/**
