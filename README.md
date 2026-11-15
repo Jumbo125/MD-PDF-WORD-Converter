@@ -117,6 +117,71 @@ Konvertierung oder eines Zusammenführens fragt das Skript danach; die Vorgabe
   Definition, Zusammenfassung, Checkliste, Verweis und Unterrichtsmitschrift;
 - Bilder an der Stelle ihres Auftretens statt als frei schwebende Elemente.
 
+### Boxen in Markdown verwenden
+
+Die Boxen aus `Formatierung/header.tex` stehen nur bei einer PDF-Erzeugung
+**mit** Standardformatierung zur Verfügung. Sie werden in einer Markdown-Datei
+als roher LaTeX-Block geschrieben. Der nachfolgende Inhalt kann direkt in eine
+`.md`-Datei kopiert werden:
+
+````markdown
+```{=latex}
+\begin{infobox}
+Allgemeine Information.
+\end{infobox}
+
+\begin{notebox}
+Ergänzender Hinweis.
+\end{notebox}
+
+\begin{importantbox}
+Besonders wichtiger Inhalt.
+\end{importantbox}
+
+\begin{warningbox}
+Achtung: Dieser Schritt kann Auswirkungen haben.
+\end{warningbox}
+
+\begin{tipbox}
+Tipp für die praktische Arbeit.
+\end{tipbox}
+
+\begin{examplebox}
+Ein konkretes Beispiel.
+\end{examplebox}
+
+\begin{stepbox}
+Schritt-für-Schritt-Anleitung.
+\end{stepbox}
+
+\begin{definitionbox}
+Begriffserklärung oder Definition.
+\end{definitionbox}
+
+\begin{summarybox}
+Kurze Zusammenfassung.
+\end{summarybox}
+
+\begin{checklistbox}
+\begin{itemize}
+  \item Erster Prüfschritt
+  \item Zweiter Prüfschritt
+\end{itemize}
+\end{checklistbox}
+
+\begin{referencebox}
+Weiterführende Quelle oder Verweis.
+\end{referencebox}
+
+\begin{unterrichtbox}
+Notizen aus dem Unterricht.
+\end{unterrichtbox}
+```
+````
+
+Für Word-Ausgaben und PDFs ohne Standardformatierung sind diese LaTeX-Boxen
+nicht geeignet. Der übrige Markdown-Inhalt wird dennoch normal konvertiert.
+
 ### Formatierung direkt in einer Markdown-Datei
 
 Zusätzlich kann jede Markdown-Datei am Anfang eigene Metadaten enthalten. Der
