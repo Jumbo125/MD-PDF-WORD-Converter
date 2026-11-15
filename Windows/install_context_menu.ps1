@@ -9,6 +9,9 @@ if (-not (Test-Path -LiteralPath $scriptPath -PathType Leaf)) { throw "Konvertie
 New-Item -Path $menuKey -Force | Out-Null
 New-ItemProperty -Path $menuKey -Name 'MUIVerb' -Value 'Convert with Pandoc' -PropertyType String -Force | Out-Null
 New-ItemProperty -Path $menuKey -Name 'Icon' -Value $pandocIcon -PropertyType String -Force | Out-Null
+# Ein leerer SubCommands-Wert kennzeichnet diesen Eintrag explizit als
+# Untermenü. Die eigentlichen Befehle liegen unten in shell\... .
+New-ItemProperty -Path $menuKey -Name 'SubCommands' -Value '' -PropertyType String -Force | Out-Null
 
 foreach ($item in @(
     @{ Key = 'ConvertToPdf'; Label = 'Convert to PDF'; Format = 'pdf' },

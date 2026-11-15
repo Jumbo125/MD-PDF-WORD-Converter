@@ -55,10 +55,14 @@ Mit `Windows\install_context_menu.ps1` kann für `.md`-Dateien das Kontextmenü
 Zeitstempel erzeugt, zum Beispiel `dokument_20261115-142530.pdf`.
 
 ```powershell
-& ".\Windows\install_context_menu.ps1"
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File ".\Windows\install_context_menu.ps1"
 ```
 
-Entfernen mit `Windows\uninstall_context_menu.ps1`.
+Entfernen mit:
+
+```powershell
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File ".\Windows\uninstall_context_menu.ps1"
+```
 
 ### Linux
 
