@@ -52,6 +52,9 @@ mkdir -p "$INSTALL_DIR"
 install -m 0755 "$PANDOC_SOURCE" "$INSTALL_DIR/pandoc"
 install -m 0755 "$TECTONIC_SOURCE" "$INSTALL_DIR/tectonic"
 
+# Die direkten Starter im Projektordner fuer kuenftige Aufrufe aktivieren.
+chmod +x "$ROOT_DIR/makepdf.sh" "$ROOT_DIR/merge2pdf.sh" "$ROOT_DIR/install.sh"
+
 echo "[OK] Linux erkannt: $LINUX_ID / $(uname -m)"
 echo "[OK] Pandoc und Tectonic installiert nach: $INSTALL_DIR"
 if [[ ":$PATH:" != *":$INSTALL_DIR:"* ]]; then
