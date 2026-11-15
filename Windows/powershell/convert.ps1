@@ -129,12 +129,6 @@ while ($true) {
     }
 
     Write-Host ""
-    $useHeader = Test-Path -LiteralPath $header
-    if (-not $useHeader) {
-        Write-Host "[WARNUNG] header.tex nicht gefunden. (nur fuer PDF relevant)"
-    }
-
-    Write-Host ""
     $indexes = Read-FileSelection -Files $files
 
     if ($null -eq $indexes) {
@@ -151,6 +145,17 @@ while ($true) {
     if ($null -eq $format) {
         Start-Sleep -Seconds 1
         continue
+    }
+
+    $useHeader = $false
+    if ($format -eq 'pdf') {
+        if (Test-Path -LiteralPath $header -PathType Leaf) {
+            $headerChoice = Read-Host 'Standardformatierung aus Formatierung/header.tex verwenden? (J/n)'
+            $useHeader = $headerChoice -notin @('n', 'N')
+        }
+        else {
+            Write-Host '[WARNUNG] Formatierung/header.tex nicht gefunden.'
+        }
     }
 
     $mode = Read-ModeSelection

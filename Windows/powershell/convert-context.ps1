@@ -4,7 +4,9 @@ param(
 
     [Parameter(Mandatory = $true)]
     [ValidateSet('pdf', 'docx')]
-    [string]$Format
+    [string]$Format,
+
+    [switch]$UseStandardFormatting
 )
 
 $ErrorActionPreference = 'Stop'
@@ -29,7 +31,10 @@ do {
 $arguments = @($sourceFile.FullName, '-o', $outputFile, '--syntax-highlighting=tango', "--resource-path=$($sourceFile.DirectoryName)")
 if ($Format -eq 'pdf') {
     $arguments += "--pdf-engine=$tectonic"
-    if (Test-Path -LiteralPath $header -PathType Leaf) { $arguments += @('-H', $header) }
+    if ($UseStandardFormatting) {
+        if (-not (Test-Path -LiteralPath $header -PathType Leaf)) { throw "Standardformatierung fehlt: $header" }
+        $arguments += @('-H', $header)
+    }
 }
 
 & $pandoc @arguments

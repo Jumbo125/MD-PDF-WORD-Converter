@@ -11,14 +11,14 @@ chmod +x "$CONVERTER"
 mkdir -p "$SERVICES_DIR"
 
 create_workflow() {
-  local name="$1" format="$2" bundle="$SERVICES_DIR/$name.workflow"
+  local name="$1" format="$2" use_standard_formatting="$3" bundle="$SERVICES_DIR/$name.workflow"
   rm -rf "$bundle"
   mkdir -p "$bundle/Contents"
   cat > "$bundle/Contents/Info.plist" <<PLIST
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0"><dict>
-<key>CFBundleIdentifier</key><string>local.pandoc-toolkit.${format}</string>
+<key>CFBundleIdentifier</key><string>local.pandoc-toolkit.${format}.${use_standard_formatting}</string>
 <key>CFBundleName</key><string>${name}</string>
 <key>CFBundlePackageType</key><string>BNDL</string>
 <key>CFBundleVersion</key><string>1.0</string>
@@ -36,7 +36,7 @@ PLIST
 <key>AMActionVersion</key><string>2.0.3</string><key>AMApplication</key><array><string>Automator</string></array>
 <key>AMProvides</key><dict><key>Container</key><string>List</string><key>Types</key><array><string>com.apple.cocoa.string</string></array></dict>
 <key>ActionBundlePath</key><string>/System/Library/Automator/Run Shell Script.action</string><key>ActionName</key><string>Run Shell Script</string>
-<key>ActionParameters</key><dict><key>COMMAND_STRING</key><string><![CDATA["$CONVERTER" $format "\$@"]]></string><key>inputMethod</key><integer>1</integer><key>shell</key><string>/bin/bash</string><key>source</key><string></string></dict>
+<key>ActionParameters</key><dict><key>COMMAND_STRING</key><string><![CDATA["$CONVERTER" $format $use_standard_formatting "\$@"]]></string><key>inputMethod</key><integer>1</integer><key>shell</key><string>/bin/bash</string><key>source</key><string></string></dict>
 <key>BundleIdentifier</key><string>com.apple.RunShellScript</string><key>CFBundleVersion</key><string>2.0.3</string><key>Class Name</key><string>RunShellScriptAction</string>
 </dict><key>isViewVisible</key><true/></dict></array>
 <key>workflowMetaData</key><dict>
@@ -48,7 +48,8 @@ PLIST
 WFLOW
 }
 
-create_workflow 'Convert with Pandoc - PDF' pdf
-create_workflow 'Convert with Pandoc - Word' docx
+create_workflow 'Convert with Pandoc - PDF (Standardformatierung)' pdf yes
+create_workflow 'Convert with Pandoc - PDF (ohne Standardformatierung)' pdf no
+create_workflow 'Convert with Pandoc - Word' docx no
 killall Finder 2>/dev/null || true
 echo '[OK] Finder-Schnellaktionen installiert.'

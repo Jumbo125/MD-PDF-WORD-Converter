@@ -3,6 +3,8 @@ set -euo pipefail
 
 FORMAT="${1:-}"
 shift || true
+USE_STANDARD_FORMATTING="${1:-no}"
+shift || true
 ROOT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)"
 
 [[ "$FORMAT" == "pdf" || "$FORMAT" == "docx" ]] || { echo "[FEHLER] Format muss pdf oder docx sein." >&2; exit 1; }
@@ -29,7 +31,10 @@ for input_file in "$@"; do
   args=("$input_file" -o "$output_file" --syntax-highlighting=tango "--resource-path=$source_dir")
   if [[ "$FORMAT" == "pdf" ]]; then
     args+=("--pdf-engine=$TECTONIC")
-    [[ -f "$ROOT_DIR/Formatierung/header.tex" ]] && args+=(-H "$ROOT_DIR/Formatierung/header.tex")
+    if [[ "$USE_STANDARD_FORMATTING" == "yes" ]]; then
+      [[ -f "$ROOT_DIR/Formatierung/header.tex" ]] || { echo "[FEHLER] Standardformatierung fehlt: $ROOT_DIR/Formatierung/header.tex" >&2; exit 1; }
+      args+=(-H "$ROOT_DIR/Formatierung/header.tex")
+    fi
   fi
   "$PANDOC" "${args[@]}"
 done

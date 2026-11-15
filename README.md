@@ -50,7 +50,8 @@ flowchart TD
 #### Kontextmenü für einzelne Markdown-Dateien
 
 Mit `Windows\install_context_menu.ps1` kann für `.md`-Dateien das Kontextmenü
-`Convert with Pandoc` installiert werden. Es enthält `Convert to PDF` und
+`Convert with Pandoc` installiert werden. Es enthält `Convert to PDF
+(Standardformatierung)`, `Convert to PDF (ohne Standardformatierung)` und
 `Convert to Word (.docx)`. Die Ausgabe wird neben der Originaldatei mit einem
 Zeitstempel erzeugt, zum Beispiel `dokument_20261115-142530.pdf`.
 
@@ -91,13 +92,64 @@ bash Mac/merge2pdf.sh
 
 #### Finder-Kontextmenü
 
-Mit `bash Mac/install_context_menu.sh` werden zwei Finder-Schnellaktionen
-installiert: `Convert with Pandoc - PDF` und `Convert with Pandoc - Word`.
+Mit `bash Mac/install_context_menu.sh` werden drei Finder-Schnellaktionen
+installiert: `Convert with Pandoc - PDF (Standardformatierung)`, `Convert with
+Pandoc - PDF (ohne Standardformatierung)` und `Convert with Pandoc - Word`.
 Die Ausgabe wird neben der Originaldatei mit Zeitstempel erstellt. Entfernen
 mit `bash Mac/uninstall_context_menu.sh`.
 
 Für Intel-Macs sind Pandoc und Tectonic enthalten. Für Apple Silicon muss noch
 die Pandoc-ARM64-Datei unter `pandoc/macos/arm64/bin/pandoc` abgelegt werden.
+
+## Dokumentformatierung
+
+Die PDF-Standardformatierung liegt in
+[`Formatierung/header.tex`](Formatierung/header.tex) und wird von den
+Konvertierungsskripten auf Wunsch eingebunden. Beim Start einer normalen
+Konvertierung oder eines Zusammenführens fragt das Skript danach; die Vorgabe
+`J` verwendet sie. Sie legt derzeit fest:
+
+- A4-Seiten mit jeweils 2 cm Rand;
+- blaue, türkisfarbene und dunkelgraue Überschriften je nach Ebene;
+- blaue, unterstrichene Links;
+- kleine, automatisch umbrochene Code-Blöcke;
+- farbige Boxen für Info, Hinweis, Wichtig, Achtung, Tipp, Beispiel, Vorgehen,
+  Definition, Zusammenfassung, Checkliste, Verweis und Unterrichtsmitschrift;
+- Bilder an der Stelle ihres Auftretens statt als frei schwebende Elemente.
+
+### Formatierung direkt in einer Markdown-Datei
+
+Zusätzlich kann jede Markdown-Datei am Anfang eigene Metadaten enthalten. Der
+Block beginnt und endet mit `---` und muss vor dem ersten Inhalt stehen:
+
+```markdown
+---
+title: "Entscheidungsbaum"
+author: "Andreas Rottmann"
+date: 2026-11-15
+lang: de-AT
+toc: true
+toc-depth: 3
+numbersections: true
+fontsize: 11pt
+---
+
+# Einleitung
+
+Hier beginnt der Dokumentinhalt.
+```
+
+Dieser YAML-Block und die Standarddatei `Formatierung/header.tex` werden
+gemeinsam eingelesen. Angaben wie Titel, Autor, Datum, Sprache,
+Inhaltsverzeichnis, Abschnittsnummerierung und Schriftgröße sind daher
+unproblematisch und gelten nur für diese Datei.
+
+Nicht doppelt festlegen solltest du hingegen LaTeX-Pakete oder deren Optionen,
+die bereits im Header stehen. Insbesondere darf in der Markdown-Datei nicht
+noch einmal `geometry` mit eigenen Rändern geladen werden, da LaTeX dann einen
+Paketkonflikt melden kann. Für eine projektweit einheitliche Gestaltung bleibt
+`Formatierung/header.tex` deshalb der richtige Ort; das YAML im Markdown ist
+für dokumentbezogene Angaben gedacht.
 
 ## Ordner
 

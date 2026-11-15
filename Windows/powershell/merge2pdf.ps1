@@ -29,12 +29,6 @@ $engine = $tectonicPath
 # Header
 $headerArg = @()
 $headerPath = Join-Path $scriptDir 'Formatierung\header.tex'
-if (Test-Path -LiteralPath $headerPath -PathType Leaf) {
-    $headerArg = @('-H', $headerPath)
-}
-else {
-    Write-Host '[WARNUNG] Formatierung\header.tex nicht gefunden. (-H wird weggelassen)' -ForegroundColor Yellow
-}
 
 # --- Ordnerauswahl ---
 Write-Host ''
@@ -121,6 +115,16 @@ $tocInput = Read-Host 'Inhaltsverzeichnis (--toc) hinzufuegen? (J/N)'
 $tocArg = @()
 if ($tocInput.Trim().ToUpper() -eq 'J') {
     $tocArg = @('--toc')
+}
+
+if (Test-Path -LiteralPath $headerPath -PathType Leaf) {
+    $headerChoice = Read-Host 'Standardformatierung aus Formatierung/header.tex verwenden? (J/n)'
+    if ($headerChoice -notin @('n', 'N')) {
+        $headerArg = @('-H', $headerPath)
+    }
+}
+else {
+    Write-Host '[WARNUNG] Formatierung\header.tex nicht gefunden. (-H wird weggelassen)' -ForegroundColor Yellow
 }
 
 # --- Output ---

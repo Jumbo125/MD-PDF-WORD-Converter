@@ -41,7 +41,7 @@ fi
 mkdir -p "$OUT_DIR"
 
 convert_files() {
-  local files=() selections=() entry index format mode extension file source_dir output log_file
+  local files=() selections=() entry index format mode extension file source_dir output log_file use_header=false
   shopt -s nullglob
   files=("$INPUT_DIR"/*.md)
   shopt -u nullglob
@@ -56,6 +56,14 @@ convert_files() {
 
   read -r -p "Zielformat: 1) PDF  2) Word (.docx): " format
   case "$format" in 1) extension=pdf ;; 2) extension=docx ;; *) echo "[FEHLER] Bitte 1 oder 2 eingeben."; return ;; esac
+  if [[ "$format" == 1 ]]; then
+    if [[ -f "$HEADER" ]]; then
+      read -r -p "Standardformatierung aus Formatierung/header.tex verwenden? (J/n): " entry
+      [[ ! "$entry" =~ ^[nN]$ ]] && use_header=true
+    else
+      echo "[WARNUNG] Formatierung/header.tex nicht gefunden."
+    fi
+  fi
   read -r -p "Modus: 1) Normal  2) Mit Log/Debug: " mode
   [[ "$mode" == 1 || "$mode" == 2 ]] || { echo "[FEHLER] Bitte 1 oder 2 eingeben."; return; }
   read -r -p "Ausfuehren? (j/n): " entry
@@ -64,7 +72,7 @@ convert_files() {
   for index in "${selections[@]}"; do
     file="${files[$((index - 1))]}"; source_dir="$(dirname "$file")"; output="$OUT_DIR/$(basename "${file%.md}").$extension"
     local args=("$(basename "$file")" -o "$output" --syntax-highlighting=tango --resource-path=.)
-    [[ "$format" == 1 ]] && { args+=("--pdf-engine=$TECTONIC"); [[ -f "$HEADER" ]] && args+=(-H "$HEADER"); }
+    [[ "$format" == 1 ]] && { args+=("--pdf-engine=$TECTONIC"); [[ "$use_header" == true ]] && args+=(-H "$HEADER"); }
     if [[ "$mode" == 2 ]]; then
       log_file="$OUT_DIR/$(basename "${file%.md}").console.log"; args+=(--verbose "--log=$OUT_DIR/$(basename "${file%.md}").pandoc-log.json")
       (cd "$source_dir" && "$PANDOC" "${args[@]}") 2>&1 | tee "$log_file"; [[ ${PIPESTATUS[0]} -eq 0 ]] || echo "[FEHLER] Umwandlung fehlgeschlagen: $(basename "$file")"
@@ -75,7 +83,7 @@ convert_files() {
 }
 
 merge_files() {
-  local dirs=() files=() entry selected toc output resource_path dir file
+  local dirs=() files=() entry selected toc output resource_path dir file use_header=false
   [[ -d "$MERGE_DIR" ]] || fail "Ordner merge fehlt."
   shopt -s nullglob
   dirs=("$MERGE_DIR"/*/)
@@ -88,11 +96,17 @@ merge_files() {
   while IFS= read -r file; do files+=("$file"); done < <(find "$selected" -type f -name '*.md' -print | sort)
   ((${#files[@]})) || { echo "[INFO] Keine Markdown-Dateien gefunden."; return; }
   read -r -p "Inhaltsverzeichnis hinzufuegen? (j/n): " toc
+  if [[ -f "$HEADER" ]]; then
+    read -r -p "Standardformatierung aus Formatierung/header.tex verwenden? (J/n): " entry
+    [[ ! "$entry" =~ ^[nN]$ ]] && use_header=true
+  else
+    echo "[WARNUNG] Formatierung/header.tex nicht gefunden."
+  fi
   output="$selected/$(basename "$selected").pdf"; resource_path="$selected"
   for file in "${files[@]}"; do dir="$(dirname "$file")"; [[ ":$resource_path:" == *":$dir:"* ]] || resource_path+=":$dir"; done
   read -r -p "Ausfuehren? (j/n): " entry; [[ "$entry" =~ ^[jJyY]$ ]] || return
   local args=("${files[@]}" -o "$output" "--pdf-engine=$TECTONIC" --syntax-highlighting=tango "--resource-path=$resource_path")
-  [[ "$toc" =~ ^[jJyY]$ ]] && args+=(--toc); [[ -f "$HEADER" ]] && args+=(-H "$HEADER")
+  [[ "$toc" =~ ^[jJyY]$ ]] && args+=(--toc); [[ "$use_header" == true ]] && args+=(-H "$HEADER")
   "$PANDOC" "${args[@]}" && echo "[OK] Fertig: $output"
 }
 
